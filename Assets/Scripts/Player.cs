@@ -10,9 +10,14 @@ public class Player : MonoBehaviour {
     public GameObject sprite;
     public Vector3 position;
     private string controller;
+    bool isRed, isBlue;
 
 	// Use this for initialization
 	void Start () {
+
+        isRed = false;
+        isBlue = false;
+
         //position = new Vector3(playerNum, 0, 0);
         switch (playerNum)
         {
@@ -36,7 +41,9 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Move();
-        this.transform.position = position;
+        Dodge();
+        Attack();
+        
 	}
 
     //Movement
@@ -67,25 +74,84 @@ public class Player : MonoBehaviour {
         //Gamepad Input
         if (Input.GetAxis(controller + "Horizontal") >= 0.1 || Input.GetAxis(controller + "Horizontal") <= -0.1)
         {
-            Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
+            //Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
             position.x += Input.GetAxis(controller + "Horizontal") / 10;
         }
         if (Input.GetAxis(controller + "Vertical") >= 0.1 || Input.GetAxis(controller + "Vertical") <= -0.1)
         {
-            Debug.Log(controller + " " + Input.GetAxis(controller + "Vertical") + " Vertical");
+            //Debug.Log(controller + " " + Input.GetAxis(controller + "Vertical") + " Vertical");
             position.y += -Input.GetAxis(controller + "Vertical") / 10;
         }
+
+        StayOnScreen();
+        this.transform.position = position;
+        //Debug.Log(position);
     }
+
+
 
     //Attack
     void Attack()
     {
+        if(Input.GetButtonDown(controller + "XboxA"))
+        {
+            Debug.Log(isRed);
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            isRed = !isRed;
+            isBlue = false;
 
+            if (isRed)
+            {
+                sr.color = Color.red;
+            }
+            else
+            {
+                sr.color = Color.white;
+            }
+
+
+        }
     }
 
     //Dodge
     void Dodge()
     {
+        if(Input.GetButtonDown(controller + "XboxB"))
+        {
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
+            isBlue = !isBlue;
+            isRed = false;
+
+            if (isBlue)
+            {
+                sr.color = Color.blue;
+            }
+            else
+            {
+                sr.color = Color.white;
+            }
+        }
+    }
+
+    void StayOnScreen()
+    {
+        if(position.x < -8.5f)
+        {
+            position.x = -8.5f;
+        }
+        else if(position.x > 8.5f)
+        {
+            position.x = 8.5f;
+        }
+
+        if(position.y < -4.5f)
+        {
+            position.y = -4.5f;
+        }
+        else if(position.y > 4.5f)
+        {
+            position.y = 4.5f;
+        }
     }
 }
