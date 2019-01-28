@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 //Handle player controls and player collision
@@ -11,7 +12,7 @@ public class Player : MonoBehaviour {
     public Vector3 position;
     private string controller;
     bool isRed, isBlue;
-
+    public GameObject Sword;
 	// Use this for initialization
 	void Start () {
 
@@ -83,6 +84,7 @@ public class Player : MonoBehaviour {
             position.y += -Input.GetAxis(controller + "Vertical") / 10;
         }
 
+
         StayOnScreen();
         this.transform.position = position;
         //Debug.Log(position);
@@ -109,8 +111,14 @@ public class Player : MonoBehaviour {
                 sr.color = Color.white;
             }
 
-
+            Instantiate(Sword, this.transform);
+            swordAnim();
         }
+    }
+
+    void swordAnim()
+    {
+        
     }
 
     //Dodge
