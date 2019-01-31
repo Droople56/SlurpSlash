@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 647df57042d12384787dcbbef06af2aa
+  - enabled: 1
+    path: Assets/Scenes/PotionCreation.unity
+    guid: 36f054f6d038cd04cbed852f47e2bbaf
   m_configObjects: {}
