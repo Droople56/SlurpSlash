@@ -10,15 +10,24 @@ public class Player : MonoBehaviour {
     public int dir = 0;
     public GameObject sprite;
     public Vector3 position;
+    public Vector3 swordPosition;
     private string controller;
     bool isRed, isBlue;
     public GameObject Sword;
-	// Use this for initialization
-	void Start () {
+    public GameObject sword1;
+    public bool isSword;
+    public float attackTimer;
+    public float speed = 5.0f;
+    private float rot = 0.0f;
+    private float rot1 = 0.0f;
+
+    // Use this for initialization
+    void Start () {
 
         isRed = false;
         isBlue = false;
-
+        isSword = false;
+        attackTimer = 0;
         //position = new Vector3(playerNum, 0, 0);
         switch (playerNum)
         {
@@ -43,10 +52,26 @@ public class Player : MonoBehaviour {
 	void Update () {
         Move();
         Dodge();
-        Attack();
+        if(isSword==false)
+            Attack();
+        else
+        {
+            Sword.transform.position = new Vector3(transform.position.x,transform.position.y,0.0f);
+            Sword.transform.rotation = transform.rotation;
+            attackTimer += Time.deltaTime;
+            if (attackTimer >= 1.5f)
+                destroySword();
+        }
         
-	}
+    }
 
+
+    void destroySword()
+    {
+        Destroy(Sword);
+        attackTimer = 0.0f;
+        isSword = false;
+    }
     //Movement
     //For the time being there will be keyboard controls, ultimately aiming for 4 Controllers
     void Move()
@@ -72,21 +97,29 @@ public class Player : MonoBehaviour {
             position.x += 0.1f;
         }
 
+        float angle = Mathf.Atan2(Input.GetAxis(controller + "Horizontal"), -Input.GetAxis(controller + "Vertical")) * Mathf.Rad2Deg;
+
         //Gamepad Input
         if (Input.GetAxis(controller + "Horizontal") >= 0.1 || Input.GetAxis(controller + "Horizontal") <= -0.1)
         {
             //Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
             position.x += Input.GetAxis(controller + "Horizontal") / 10;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
         }
         if (Input.GetAxis(controller + "Vertical") >= 0.1 || Input.GetAxis(controller + "Vertical") <= -0.1)
         {
             //Debug.Log(controller + " " + Input.GetAxis(controller + "Vertical") + " Vertical");
             position.y += -Input.GetAxis(controller + "Vertical") / 10;
+            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
         }
 
 
+        
+
         StayOnScreen();
+        
         this.transform.position = position;
+
         //Debug.Log(position);
     }
 
@@ -111,16 +144,24 @@ public class Player : MonoBehaviour {
                 sr.color = Color.white;
             }
 
-            Instantiate(Sword, this.transform);
+            Sword=Instantiate(sword1, new Vector2(transform.position.x,transform.position.y),transform.rotation);
+            Sword.name = controller;
+            isSword = true;
             swordAnim();
         }
+
+
     }
 
     void swordAnim()
     {
         
     }
-
+    public void resetPlayer()
+    {
+        position = Vector3.zero;
+        transform.position = position;
+    }
     //Dodge
     void Dodge()
     {
@@ -138,6 +179,17 @@ public class Player : MonoBehaviour {
             else
             {
                 sr.color = Color.white;
+            }
+
+            if (Input.GetAxis(controller + "Horizontal") >= 0.1 || Input.GetAxis(controller + "Horizontal") <= -0.1)
+            {
+                //Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
+                position.x += Input.GetAxis(controller + "Horizontal")*2;
+            }
+            if (Input.GetAxis(controller + "Vertical") >= 0.1 || Input.GetAxis(controller + "Vertical") <= -0.1)
+            {
+                //Debug.Log(controller + " " + Input.GetAxis(controller + "Vertical") + " Vertical");
+                position.y += -Input.GetAxis(controller + "Vertical")*2;
             }
         }
     }
