@@ -24,13 +24,19 @@ public class Manager : MonoBehaviour {
         {
             for (int j = 0; j < players.Count; j++)
             {
-                if (i != j)
+                if(players[i] != null && players[j] != null)
                 {
-                    if (players[i].GetComponent<CircleCollider2D>().bounds.Intersects(players[j].GetComponent<Player>().Sword.GetComponent<BoxCollider2D>().bounds))
+                    if (players[i] != players[j])
                     {
-                        //will reduce health later, for now just resets player position
-                        players[i].GetComponent<Player>().resetPlayer();
-                        
+                        if(players[j].GetComponent<Player>().Sword != null)
+                        {
+                            if (players[i].GetComponent<CircleCollider2D>().bounds.Intersects(players[j].GetComponent<Player>().Sword.GetComponent<BoxCollider2D>().bounds))
+                            {
+                                //will reduce health later, for now just resets player position
+                                players[i].GetComponent<Player>().resetPlayer();
+
+                            }
+                        }
                     }
                 }
             }

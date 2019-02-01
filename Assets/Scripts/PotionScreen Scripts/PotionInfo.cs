@@ -9,7 +9,7 @@ public class PotionInfo : MonoBehaviour {
 
     private void Start()
     {
-        potionMngr = GameObject.Find("Manager").GetComponent<PotionManager>();
+        potionMngr = GameObject.Find("PotionManager").GetComponent<PotionManager>();
     }
 
     //handle clicks

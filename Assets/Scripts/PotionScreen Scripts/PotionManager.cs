@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PotionManager : MonoBehaviour {
     [HideInInspector]
@@ -8,16 +10,62 @@ public class PotionManager : MonoBehaviour {
 
     int[] playerEffects;
 
+    GameObject text;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     private void Start()
     {
         p1_potions = new List<int>();
         p2_potions = new List<int>();
         p3_potions = new List<int>();
         p4_potions = new List<int>();
+
+        text = GameObject.Find("PotionText");
+    }
+
+
+
+    void ParseIngredientList(List<int> iList)
+    {
+        string ingredients = "Player 1 Ingredients: ";
+        int count = 0;
+
+        //convert our list of numbers into words
+        foreach(int i in iList)
+        {
+            switch (i)
+            {
+                case 1:
+                    ingredients += "Red";
+                    break;
+                case 2:
+                    ingredients += "Blue";
+                    break;
+                case 3:
+                    ingredients += "Yellow";
+                    break;
+            }
+
+            //add a parse inbetween non-last ingredients
+            if(count < iList.Count - 1)
+            {
+                ingredients += ", ";
+            }
+
+            count++;
+        }
+
+        text.GetComponent<Text>().text = ingredients;
     }
 
     //string for debugging
     string p1_ingredients;
+
+    //string to display player choices
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -31,6 +79,8 @@ public class PotionManager : MonoBehaviour {
 
             Debug.Log(p1_ingredients);
         }
+
+        ParseIngredientList(p1_potions);
     }
 
     public bool p1Full()
@@ -178,5 +228,10 @@ public class PotionManager : MonoBehaviour {
         }
 
         return 0;
+    }
+
+    public void StartFightScene()
+    {
+        SceneManager.LoadScene("TestScene");
     }
 }
