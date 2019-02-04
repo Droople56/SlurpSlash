@@ -20,6 +20,10 @@ public class Player : MonoBehaviour {
     public float speed = 5.0f;
     private float rot = 0.0f;
     private float rot1 = 0.0f;
+    Vector3 forward;
+    public float swordDistance = 1.0f;
+
+    Vector3 input;
 
     // Use this for initialization
     void Start () {
@@ -28,6 +32,10 @@ public class Player : MonoBehaviour {
         isBlue = false;
         isSword = false;
         attackTimer = 0;
+
+        forward = new Vector3(0, -1);
+        input = new Vector3(0,0,0);
+
         //position = new Vector3(playerNum, 0, 0);
         switch (playerNum)
         {
@@ -52,15 +60,20 @@ public class Player : MonoBehaviour {
 	void Update () {
         Move();
         Dodge();
-        if(isSword==false)
+        if (isSword == false)
+        {
             Attack();
+        }
         else
         {
-            Sword.transform.position = new Vector3(transform.position.x,transform.position.y,0.0f);
-            Sword.transform.rotation = transform.rotation;
+            Sword.transform.position = new Vector3(transform.position.x + (input.x * swordDistance),transform.position.y + (input.y * swordDistance),0.0f);
+
+            Sword.transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(0, 0, 90.0f));
             attackTimer += Time.deltaTime;
             if (attackTimer >= 1.5f)
+            {
                 destroySword();
+            }
         }
         
     }
@@ -104,17 +117,31 @@ public class Player : MonoBehaviour {
         {
             //Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
             position.x += Input.GetAxis(controller + "Horizontal") / 10;
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
+
+            if (!isSword)
+            {
+                input.x = Input.GetAxis(controller + "Horizontal") / 10;
+            }
+
+            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
+
+            forward = new Vector3(Mathf.Cos(forward.x), Mathf.Sin(forward.x), 0.0f);
         }
         if (Input.GetAxis(controller + "Vertical") >= 0.1 || Input.GetAxis(controller + "Vertical") <= -0.1)
         {
             //Debug.Log(controller + " " + Input.GetAxis(controller + "Vertical") + " Vertical");
             position.y += -Input.GetAxis(controller + "Vertical") / 10;
+
+            if (!isSword)
+            {
+                input.y = -Input.GetAxis(controller + "Vertical") / 10;
+            }
+
             //transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
         }
 
 
-        
+        input.Normalize();
 
         StayOnScreen();
         
@@ -157,12 +184,14 @@ public class Player : MonoBehaviour {
     {
         
     }
+
     public void resetPlayer()
     {
         position = Vector3.zero;
         transform.position = position;
     }
-    //Dodge
+
+    //Press B to dodge
     void Dodge()
     {
         if(Input.GetButtonDown(controller + "XboxB"))
@@ -185,6 +214,7 @@ public class Player : MonoBehaviour {
             {
                 //Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
                 position.x += Input.GetAxis(controller + "Horizontal")*2;
+
             }
             if (Input.GetAxis(controller + "Vertical") >= 0.1 || Input.GetAxis(controller + "Vertical") <= -0.1)
             {

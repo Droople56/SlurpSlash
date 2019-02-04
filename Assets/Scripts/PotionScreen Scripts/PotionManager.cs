@@ -58,8 +58,8 @@ public class PotionManager : MonoBehaviour {
 
             count++;
         }
-
-        text.GetComponent<Text>().text = ingredients;
+        if (text != null) { text.GetComponent<Text>().text = ingredients; }
+        
     }
 
     //string for debugging
