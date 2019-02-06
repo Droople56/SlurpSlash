@@ -34,7 +34,7 @@ public class Player : MonoBehaviour {
         attackTimer = 0;
 
         forward = new Vector3(0, -1);
-        input = new Vector3(0,0,0);
+        input = new Vector2(0,0);
 
         //position = new Vector3(playerNum, 0, 0);
         switch (playerNum)
@@ -73,6 +73,7 @@ public class Player : MonoBehaviour {
             if (attackTimer >= 1.5f)
             {
                 destroySword();
+                input = new Vector2(0, 0);
             }
         }
         
