@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4445819848305376}
   - component: {fileID: 114050357278925540}
+  - component: {fileID: 114578141917624764}
   - component: {fileID: 212632495710531530}
   - component: {fileID: 58155820528070014}
   m_Layer: 0
@@ -68,16 +69,89 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb353948eb1c694ba426e4fe4b17876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_playerAnimator: {fileID: 114578141917624764}
   playerNum: 1
   dir: 0
   sprite: {fileID: 0}
   position: {x: -4, y: 0, z: 0}
+  startPosition: {x: 0, y: 0, z: 0}
   swordPosition: {x: 0, y: 0, z: 0}
   Sword: {fileID: 1817921502153966, guid: 80b010f92c1e9b84885e78e125451a0c, type: 2}
   sword1: {fileID: 1817921502153966, guid: 80b010f92c1e9b84885e78e125451a0c, type: 2}
   isSword: 0
   attackTimer: 0
   speed: 5
+  score: 0
+  swordDistance: 1
+  m_playerState: 0
+  m_facing: 0
+--- !u!114 &114578141917624764
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1977183824859250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82c8cd24f22b0b540b6656adbe8d1947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_player: {fileID: 114050357278925540}
+  m_sprRender: {fileID: 212632495710531530}
+  m_fps: 26
+  m_walk: 0
+  m_attack: 0
+  m_attackTime: 0
+  m_playerIdle:
+  - {fileID: 21300000, guid: 7b4fc49a1b63daa40906ed38eb8ffb7d, type: 3}
+  - {fileID: 21300000, guid: fcf46db537f74b145ab3a48e4041da13, type: 3}
+  - {fileID: 21300000, guid: 14ffd176c5fa25b44ad0becc392b79d8, type: 3}
+  m_playerWalkUp:
+  - {fileID: 21300000, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300002, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300004, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300006, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300008, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300010, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300012, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300014, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300016, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300018, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300020, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  - {fileID: 21300022, guid: 99dd02d6d5fe20648b527245e42d7173, type: 3}
+  m_playerWalkDown:
+  - {fileID: 21300000, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300002, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300004, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300006, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300008, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300010, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300012, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300014, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300016, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300018, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300020, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  - {fileID: 21300022, guid: ef2fa917a7cbd1e4d89a3b75961526da, type: 3}
+  m_playerWalkLeftRight:
+  - {fileID: 21300000, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300002, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300004, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300006, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300008, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300010, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300012, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300014, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300016, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300018, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300020, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  - {fileID: 21300022, guid: 8a092c278a5321e4a9828752ca06b988, type: 3}
+  m_playerAttack:
+  - {fileID: 21300000, guid: 59c927851b0e3a8498ab870e8f41ba82, type: 3}
+  - {fileID: 21300002, guid: 59c927851b0e3a8498ab870e8f41ba82, type: 3}
+  - {fileID: 21300004, guid: 59c927851b0e3a8498ab870e8f41ba82, type: 3}
+  - {fileID: 21300006, guid: 59c927851b0e3a8498ab870e8f41ba82, type: 3}
+  - {fileID: 21300008, guid: 59c927851b0e3a8498ab870e8f41ba82, type: 3}
+  - {fileID: 21300010, guid: 59c927851b0e3a8498ab870e8f41ba82, type: 3}
 --- !u!212 &212632495710531530
 SpriteRenderer:
   m_ObjectHideFlags: 1

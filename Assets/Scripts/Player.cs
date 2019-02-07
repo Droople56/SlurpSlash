@@ -5,6 +5,8 @@ using UnityEngine;
 //Handle player controls and player collision
 public class Player : MonoBehaviour {
 
+    public PlayerAnimation m_playerAnimator;
+
     //Attributes
     public int playerNum = 0;
     public int dir = 0;
@@ -25,6 +27,39 @@ public class Player : MonoBehaviour {
     public float swordDistance = 1.0f;
 
     Vector3 input;
+
+    public PlayerState m_playerState;
+    public enum PlayerState
+    {
+        IDLE,
+        WALK,
+        ATTACK
+    }
+    
+    public PlayerFacing m_facing;
+    //public PlayerFacing Facing
+    //{
+    //    get
+    //    {
+    //        if (forward.x == 1)
+    //        {
+    //            m_facing = PlayerFacing.RIGHT;
+    //            return m_facing;
+    //        }
+    //        else
+    //        {
+    //            m_facing = PlayerFacing.LEFT;
+    //            return m_facing;
+    //        }
+    //    }
+    //}
+    public enum PlayerFacing
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    }
 
     // Use this for initialization
     void Start () {
@@ -99,6 +134,9 @@ public class Player : MonoBehaviour {
     //For the time being there will be keyboard controls, ultimately aiming for 4 Controllers
     void Move()
     {
+        if (m_playerState != PlayerState.ATTACK)
+        m_playerState = PlayerState.IDLE;
+
         //Up
         if (Input.GetKey(KeyCode.W))
         {
@@ -123,30 +161,53 @@ public class Player : MonoBehaviour {
         //float angle = Mathf.Atan2(Input.GetAxis(controller + "Horizontal"), -Input.GetAxis(controller + "Vertical")) * Mathf.Rad2Deg;
 
         //Gamepad Input
-        if (Input.GetAxis(controller + "Horizontal") >= 0.1 || Input.GetAxis(controller + "Horizontal") <= -0.1)
+        float horizontalInput = Input.GetAxis(controller + "Horizontal");
+        float verticalInput = Input.GetAxis(controller + "Vertical");
+
+        if (horizontalInput >= 0.1 || horizontalInput <= -0.1)
         {
+            m_playerState = PlayerState.WALK;
+
             //Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
-            position.x += Input.GetAxis(controller + "Horizontal") / 10;
+            position.x += horizontalInput / 10;
 
             if (!isSword)
             {
-                input.x = Input.GetAxis(controller + "Horizontal") / 10;
+                input.x = horizontalInput / 10;
             }
 
+            if (horizontalInput <= -0.15)
+            {
+                m_facing = PlayerFacing.LEFT;
+            }
+            if (horizontalInput >= 0.15)
+            {
+                m_facing = PlayerFacing.RIGHT;
+            }
             //transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
 
             forward = new Vector3(Mathf.Cos(forward.x), Mathf.Sin(forward.x), 0.0f);
         }
-        if (Input.GetAxis(controller + "Vertical") >= 0.1 || Input.GetAxis(controller + "Vertical") <= -0.1)
+        if (verticalInput >= 0.1 || verticalInput <= -0.1)
         {
+            m_playerState = PlayerState.WALK;
+
             //Debug.Log(controller + " " + Input.GetAxis(controller + "Vertical") + " Vertical");
-            position.y += -Input.GetAxis(controller + "Vertical") / 10;
+            position.y += -verticalInput / 10;
 
             if (!isSword)
             {
-                input.y = -Input.GetAxis(controller + "Vertical") / 10;
+                input.y = -verticalInput / 10;
             }
 
+            if (-verticalInput <= -0.15)
+            {
+                m_facing = PlayerFacing.DOWN;
+            }
+            if (-verticalInput >= 0.15)
+            {
+                m_facing = PlayerFacing.UP;
+            }
             //transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
         }
 
@@ -186,9 +247,11 @@ public class Player : MonoBehaviour {
             Sword.name = controller;
             isSword = true;
             swordAnim();
+
+            m_playerState = PlayerState.ATTACK;
         }
 
-
+        
     }
 
     void swordAnim()
