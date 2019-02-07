@@ -10,6 +10,7 @@ public class Player : MonoBehaviour {
     public int dir = 0;
     public GameObject sprite;
     public Vector3 position;
+    public Vector3 startPosition;
     public Vector3 swordPosition;
     private string controller;
     bool isRed, isBlue;
@@ -18,8 +19,8 @@ public class Player : MonoBehaviour {
     public bool isSword;
     public float attackTimer;
     public float speed = 5.0f;
-    private float rot = 0.0f;
-    private float rot1 = 0.0f;
+    public int score = 0;
+
     Vector3 forward;
     public float swordDistance = 1.0f;
 
@@ -32,10 +33,12 @@ public class Player : MonoBehaviour {
         isBlue = false;
         isSword = false;
         attackTimer = 0;
-
+        startPosition = transform.position;
         forward = new Vector3(0, -1);
         input = new Vector2(0,0);
+        Sword = Instantiate(sword1, new Vector2(transform.position.x, transform.position.y), transform.rotation);
 
+        Sword.SetActive(false);
         //position = new Vector3(playerNum, 0, 0);
         switch (playerNum)
         {
@@ -76,13 +79,19 @@ public class Player : MonoBehaviour {
                 input = new Vector2(0, 0);
             }
         }
-        
+       
     }
 
-
-    void destroySword()
+    public void addScore()
     {
-        Destroy(Sword);
+        score++;
+    }
+
+    public void destroySword()
+    {
+        //Destroy(Sword);
+        Sword.SetActive(false);
+        //Sword = null;
         attackTimer = 0.0f;
         isSword = false;
     }
@@ -111,7 +120,7 @@ public class Player : MonoBehaviour {
             position.x += 0.1f;
         }
 
-        float angle = Mathf.Atan2(Input.GetAxis(controller + "Horizontal"), -Input.GetAxis(controller + "Vertical")) * Mathf.Rad2Deg;
+        //float angle = Mathf.Atan2(Input.GetAxis(controller + "Horizontal"), -Input.GetAxis(controller + "Vertical")) * Mathf.Rad2Deg;
 
         //Gamepad Input
         if (Input.GetAxis(controller + "Horizontal") >= 0.1 || Input.GetAxis(controller + "Horizontal") <= -0.1)
@@ -158,7 +167,7 @@ public class Player : MonoBehaviour {
     {
         if(Input.GetButtonDown(controller + "XboxA"))
         {
-            Debug.Log(isRed);
+            //Debug.Log(isRed);
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
             isRed = !isRed;
             isBlue = false;
@@ -172,7 +181,8 @@ public class Player : MonoBehaviour {
                 sr.color = Color.white;
             }
 
-            Sword=Instantiate(sword1, new Vector2(transform.position.x,transform.position.y),transform.rotation);
+            //Sword=Instantiate(sword1, new Vector2(transform.position.x,transform.position.y),transform.rotation);
+            Sword.SetActive(true);
             Sword.name = controller;
             isSword = true;
             swordAnim();
@@ -188,7 +198,7 @@ public class Player : MonoBehaviour {
 
     public void resetPlayer()
     {
-        position = Vector3.zero;
+        position = startPosition;
         transform.position = position;
     }
 
