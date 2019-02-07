@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour {
 
@@ -9,6 +10,7 @@ public class Manager : MonoBehaviour {
     public GameObject player2;
     public List<GameObject> players;
     public Canvas c1;
+    public Button restartButton;
     public Text p1Score;
     public Text p2Score;
     public Text cdTimer;
@@ -18,7 +20,10 @@ public class Manager : MonoBehaviour {
 	void Start () {
         players.Add(player1);
         players.Add(player2);
-        countdownTimer = 120.0f;
+        countdownTimer = 10.0f;
+        restartButton.enabled = false;
+        restartButton.gameObject.SetActive(false);
+        restartButton.onClick.AddListener(reloadMenu);
 	}
 	
 	// Update is called once per frame
@@ -29,7 +34,7 @@ public class Manager : MonoBehaviour {
         {
             player1SwordCollision();
             player2SwordCollision();
-            //swordPlayerCollisions();
+            
             gameTimer();
         }
         displayScore();
@@ -45,15 +50,19 @@ public class Manager : MonoBehaviour {
             {
                 if (i != 0)
                 {
+                    //Debug.Log(i);
+                    //Debug.Log("hey1");
                     if (players[0].GetComponent<Player>().Sword.GetComponent<BoxCollider2D>().bounds.Intersects(players[i].GetComponent<Player>().GetComponent<CircleCollider2D>().bounds))
                     {
                         Debug.Log("hey");
                         players[i].GetComponent<Player>().resetPlayer();
                         players[0].GetComponent<Player>().addScore();
+                        declareWinner();
                     }
                 }
             }
         }
+
     }
     void player2SwordCollision()
     {
@@ -68,40 +77,11 @@ public class Manager : MonoBehaviour {
                         Debug.Log("hey1");
                         players[i].GetComponent<Player>().resetPlayer();
                         players[1].GetComponent<Player>().addScore();
+                        declareWinner();
                     }
                 }
             }
         }
-    }
-
-    void swordPlayerCollisions()
-    {
-        for (int i = 0; i < players.Count; i++)
-        {
-            for (int j = 0; j < players.Count; j++)
-            {
-                if(players[i] != null && players[j] != null)
-                {
-                    if (players[i] != players[j])
-                    {
-                        if(players[j].GetComponent<Player>().Sword != null)
-                        {
-                            Debug.Log("hey1");
-                            if (players[i].GetComponent<CircleCollider2D>().bounds.Intersects(players[j].GetComponent<Player>().Sword.GetComponent<BoxCollider2D>().bounds))
-                            {
-                                Debug.Log("hey");
-                                //will reduce health later, for now just resets player position
-                                players[i].GetComponent<Player>().resetPlayer();
-                                players[i].GetComponent<Player>().destroySword();
-                                players[j].GetComponent<Player>().addScore();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
     }
 
     void displayScore()
@@ -128,5 +108,13 @@ public class Manager : MonoBehaviour {
         {
             winnerText.text = "Player 2 wins!";
         }
+        restartButton.enabled = true;
+        restartButton.gameObject.SetActive(true);
+        
+    }
+
+    void reloadMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

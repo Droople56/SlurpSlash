@@ -104,9 +104,7 @@ public class Player : MonoBehaviour {
         }
         else
         {
-            Sword.transform.position = new Vector3(transform.position.x + (input.x * swordDistance),transform.position.y + (input.y * swordDistance),0.0f);
 
-            Sword.transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(0, 0, 90.0f));
             attackTimer += Time.deltaTime;
             if (attackTimer >= 1.5f)
             {
@@ -114,7 +112,9 @@ public class Player : MonoBehaviour {
                 input = new Vector2(0, 0);
             }
         }
-       
+
+
+
     }
 
     public void addScore()
@@ -124,9 +124,8 @@ public class Player : MonoBehaviour {
 
     public void destroySword()
     {
-        //Destroy(Sword);
+        
         Sword.SetActive(false);
-        //Sword = null;
         attackTimer = 0.0f;
         isSword = false;
     }
@@ -158,7 +157,6 @@ public class Player : MonoBehaviour {
             position.x += 0.1f;
         }
 
-        //float angle = Mathf.Atan2(Input.GetAxis(controller + "Horizontal"), -Input.GetAxis(controller + "Vertical")) * Mathf.Rad2Deg;
 
         //Gamepad Input
         float horizontalInput = Input.GetAxis(controller + "Horizontal");
@@ -168,7 +166,6 @@ public class Player : MonoBehaviour {
         {
             m_playerState = PlayerState.WALK;
 
-            //Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
             position.x += horizontalInput / 10;
 
             if (!isSword)
@@ -184,7 +181,6 @@ public class Player : MonoBehaviour {
             {
                 m_facing = PlayerFacing.RIGHT;
             }
-            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
 
             forward = new Vector3(Mathf.Cos(forward.x), Mathf.Sin(forward.x), 0.0f);
         }
@@ -192,7 +188,6 @@ public class Player : MonoBehaviour {
         {
             m_playerState = PlayerState.WALK;
 
-            //Debug.Log(controller + " " + Input.GetAxis(controller + "Vertical") + " Vertical");
             position.y += -verticalInput / 10;
 
             if (!isSword)
@@ -208,7 +203,6 @@ public class Player : MonoBehaviour {
             {
                 m_facing = PlayerFacing.UP;
             }
-            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
         }
 
 
@@ -217,8 +211,9 @@ public class Player : MonoBehaviour {
         StayOnScreen();
         
         this.transform.position = position;
+        Sword.transform.position = new Vector3(transform.position.x + (input.x * swordDistance), transform.position.y + (input.y * swordDistance), 0.0f);
 
-        //Debug.Log(position);
+        Sword.transform.rotation = transform.rotation * Quaternion.Euler(new Vector3(0, 0, 90.0f));
     }
 
 
@@ -228,36 +223,17 @@ public class Player : MonoBehaviour {
     {
         if(Input.GetButtonDown(controller + "XboxA"))
         {
-            //Debug.Log(isRed);
-            SpriteRenderer sr = GetComponent<SpriteRenderer>();
-            isRed = !isRed;
-            isBlue = false;
-
-            if (isRed)
-            {
-                sr.color = Color.red;
-            }
-            else
-            {
-                sr.color = Color.white;
-            }
-
-            //Sword=Instantiate(sword1, new Vector2(transform.position.x,transform.position.y),transform.rotation);
+            isSword = true;
             Sword.SetActive(true);
             Sword.name = controller;
-            isSword = true;
-            swordAnim();
-
+            
             m_playerState = PlayerState.ATTACK;
         }
 
         
     }
 
-    void swordAnim()
-    {
-        
-    }
+
 
     public void resetPlayer()
     {
@@ -286,13 +262,11 @@ public class Player : MonoBehaviour {
 
             if (Input.GetAxis(controller + "Horizontal") >= 0.1 || Input.GetAxis(controller + "Horizontal") <= -0.1)
             {
-                //Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
                 position.x += Input.GetAxis(controller + "Horizontal")*2;
 
             }
             if (Input.GetAxis(controller + "Vertical") >= 0.1 || Input.GetAxis(controller + "Vertical") <= -0.1)
             {
-                //Debug.Log(controller + " " + Input.GetAxis(controller + "Vertical") + " Vertical");
                 position.y += -Input.GetAxis(controller + "Vertical")*2;
             }
         }
