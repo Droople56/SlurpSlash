@@ -10,11 +10,18 @@ public class PotionManager : MonoBehaviour {
 
     int[] playerEffects;
 
-    GameObject text;
+    GameObject p1_text;
+    GameObject p2_text;
+    GameObject currentPlayerText;
+
+    public List<GameObject> ingredientButtons;
+
+    int currentPlayer = 1;
 
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        ingredientButtons = new List<GameObject>();
     }
 
     private void Start()
@@ -24,14 +31,17 @@ public class PotionManager : MonoBehaviour {
         p3_potions = new List<int>();
         p4_potions = new List<int>();
 
-        text = GameObject.Find("PotionText");
+        p1_text = GameObject.Find("p1_potionText");
+        p2_text = GameObject.Find("p2_potionText");
+        currentPlayerText = GameObject.Find("CurrentPlayerText");
+
     }
 
 
 
-    void ParseIngredientList(List<int> iList)
+    void ParseIngredientList(List<int> iList, int playerNum, GameObject player_text)
     {
-        string ingredients = "Player 1 Ingredients: ";
+        string ingredients = "Player " + playerNum + " Ingredients: ";
         int count = 0;
 
         //convert our list of numbers into words
@@ -58,12 +68,13 @@ public class PotionManager : MonoBehaviour {
 
             count++;
         }
-        if (text != null) { text.GetComponent<Text>().text = ingredients; }
-        
+
+        if(player_text != null) { player_text.GetComponent<Text>().text = ingredients; }
     }
 
     //string for debugging
     string p1_ingredients;
+    string p2_ingredients;
 
     //string to display player choices
     private void Update()
@@ -80,7 +91,11 @@ public class PotionManager : MonoBehaviour {
             Debug.Log(p1_ingredients);
         }
 
-        ParseIngredientList(p1_potions);
+        //player potions, player number, player text
+        ParseIngredientList(p1_potions, 1, p1_text);
+        ParseIngredientList(p2_potions, 2, p2_text);
+
+        if (currentPlayerText != null) { currentPlayerText.GetComponent<Text>().text = "Selecting for Player: " + currentPlayer; }
     }
 
     public bool p1Full()
@@ -125,14 +140,14 @@ public class PotionManager : MonoBehaviour {
 
 
     //Effects
-    //1 - 3 Reds = Run Fast
-    //2 - 3 Blue = Bigger and Stronger
+    //1 - 3 Reds = Run Fast - Implemented
+    //2 - 3 Blue = Bigger and Stronger - Implemented
     //3 - 3 Yellow = Throw Farther
     //4 - 2 Red 1 Blue = Hat
     //5 - 2 Red 1 Yellow = More Health
-    //6 - 2 Blue 1 Red = Dodge
+    //6 - 2 Blue 1 Red = Dodge - Implemented
     //7 - 2 Blue 1 Yellow = Peg Leg
-    //8 - 2 Yellow 1 Red = Smaller and Weaker
+    //8 - 2 Yellow 1 Red = Smaller and Weaker - Implemented
     //9 - 2 Yellow 1 Blue = 50% chance to hit and to be hit
     //10 - 1 Yellow 1 Red 1 Blue = Invisible
 
@@ -233,5 +248,75 @@ public class PotionManager : MonoBehaviour {
     public void StartFightScene()
     {
         SceneManager.LoadScene("TestScene");
+    }
+
+    public void Modify(GameObject gPlayer, int effectNum)
+    {
+        Player pc = gPlayer.GetComponent<Player>();
+        switch (effectNum)
+        {
+            //increase speed
+            case 1:
+                pc.speed *= 1.5f;
+                break;
+            //decrease speed, increase size
+            case 2:
+                pc.speed *= 0.5f;
+                pc.gameObject.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+                break;
+            //throw farther
+            case 3:
+                break;
+            //hat
+            case 4:
+                break;
+            //increase health
+            case 5:
+                break;
+            //Dodge Farther
+            case 6:
+                pc.dodgeFactor *= 1.5f;
+                break;
+            //Peg Leg
+            case 7:
+                break;
+            //Smaller and Weaker
+            case 8:
+                pc.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                break;
+            //50% to be hit and to hit
+            case 9:
+                break;
+            //Invisible sometimes
+            case 10:
+                break;
+        }
+    }
+
+    public void SwitchPlayer()
+    {
+        switch (currentPlayer)
+        {
+            case 1:
+                currentPlayer = 2;
+                foreach (GameObject iB in ingredientButtons)
+                {
+                    iB.GetComponent<PotionInfo>().currentPlayer = 2;
+                }
+                break;
+            case 2:
+                currentPlayer = 1;
+                foreach (GameObject iB in ingredientButtons)
+                {
+                    iB.GetComponent<PotionInfo>().currentPlayer = 1;
+                }
+                break;
+        }
+    }
+
+    public void Reset()
+    {
+        p1_potions.Clear();
+        p2_potions.Clear();
     }
 }

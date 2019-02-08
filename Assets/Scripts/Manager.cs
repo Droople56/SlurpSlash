@@ -17,6 +17,9 @@ public class Manager : MonoBehaviour {
     public Text cdTimer;
     public Text winnerText;
     float countdownTimer;
+
+    PotionManager pMngr;
+
 	// Use this for initialization
 	void Start () {
         players.Add(player1);
@@ -28,7 +31,12 @@ public class Manager : MonoBehaviour {
         quitButton.enabled = false;
         quitButton.gameObject.SetActive(false);
         quitButton.onClick.AddListener(quitGame);
-    }
+
+        pMngr = GameObject.Find("PotionManager").GetComponent<PotionManager>();
+
+        pMngr.Modify(player1, pMngr.GenerateEffects(pMngr.p1_potions));
+        pMngr.Modify(player2, pMngr.GenerateEffects(pMngr.p2_potions));
+	}
 	
 	// Update is called once per frame
 	void Update () {

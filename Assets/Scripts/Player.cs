@@ -22,6 +22,7 @@ public class Player : MonoBehaviour {
     public float attackTimer;
     public float speed = 5.0f;
     public int score = 0;
+    public float dodgeFactor = 2.0f;
 
     Vector3 forward;
     public float swordDistance = 1.0f;
@@ -251,23 +252,25 @@ public class Player : MonoBehaviour {
             isBlue = !isBlue;
             isRed = false;
 
-            if (isBlue)
-            {
-                sr.color = Color.blue;
-            }
-            else
-            {
-                sr.color = Color.white;
-            }
+            //if (isBlue)
+            //{
+            //    sr.color = Color.blue;
+            //}
+            //else
+            //{
+            //    sr.color = Color.white;
+            //}
 
             if (Input.GetAxis(controller + "Horizontal") >= 0.1 || Input.GetAxis(controller + "Horizontal") <= -0.1)
             {
-                position.x += Input.GetAxis(controller + "Horizontal")*2;
+                //Debug.Log(controller + " " + Input.GetAxis(controller + "Horizontal") + " Horizontal");
+                position.x += Input.GetAxis(controller + "Horizontal")*dodgeFactor;
 
             }
             if (Input.GetAxis(controller + "Vertical") >= 0.1 || Input.GetAxis(controller + "Vertical") <= -0.1)
             {
-                position.y += -Input.GetAxis(controller + "Vertical")*2;
+                //Debug.Log(controller + " " + Input.GetAxis(controller + "Vertical") + " Vertical");
+                position.y += -Input.GetAxis(controller + "Vertical")*dodgeFactor;
             }
         }
     }
