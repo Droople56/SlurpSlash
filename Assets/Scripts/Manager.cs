@@ -11,6 +11,7 @@ public class Manager : MonoBehaviour {
     public List<GameObject> players;
     public Canvas c1;
     public Button restartButton;
+    public Button quitButton;
     public Text p1Score;
     public Text p2Score;
     public Text cdTimer;
@@ -20,11 +21,14 @@ public class Manager : MonoBehaviour {
 	void Start () {
         players.Add(player1);
         players.Add(player2);
-        countdownTimer = 10.0f;
+        countdownTimer = 120.0f;
         restartButton.enabled = false;
         restartButton.gameObject.SetActive(false);
         restartButton.onClick.AddListener(reloadMenu);
-	}
+        quitButton.enabled = false;
+        quitButton.gameObject.SetActive(false);
+        quitButton.onClick.AddListener(quitGame);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -104,15 +108,25 @@ public class Manager : MonoBehaviour {
         {
             winnerText.text = "Player 1 wins!";
         }
-        else
+        else if(players[1].GetComponent<Player>().score > players[0].GetComponent<Player>().score)
         {
             winnerText.text = "Player 2 wins!";
+
+        }
+        else
+        {
+            winnerText.text = "Draw!";
         }
         restartButton.enabled = true;
         restartButton.gameObject.SetActive(true);
+        quitButton.enabled = true;
+        quitButton.gameObject.SetActive(true);
         
     }
-
+    void quitGame()
+    {
+        Application.Quit();
+    }
     void reloadMenu()
     {
         SceneManager.LoadScene("MainMenu");
