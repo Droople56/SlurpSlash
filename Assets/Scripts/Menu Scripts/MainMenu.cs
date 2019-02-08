@@ -9,8 +9,14 @@ public class MainMenu : MonoBehaviour {
 
     public void StartGame()
     {
-        potionMngr = GameObject.Find("PotionManager").GetComponent<PotionManager>();
-        potionMngr.Reset();
+        
+
+        if (GameObject.Find("PotionManager") != null)
+        {
+            potionMngr = GameObject.Find("PotionManager").GetComponent<PotionManager>();
+            potionMngr.Reset();
+        }
+        
         SceneManager.LoadScene("PotionCreation");
     }
 }
